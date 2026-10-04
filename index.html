@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Falcon Lightning Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@500;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07142b;--tl:#19e3c8;--gd:#ffc94d;--tx:#eaf2ff;--ok:#3ddc84;--no:#ff8a8a;--cd:#0f2750;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#14407c,var(--bg) 60%) fixed;color:var(--tx);font:600 17px Nunito,sans-serif}
+.w{max-width:780px;margin:0 auto;padding:14px}.scr{display:none}.on{display:block}
+h1,h2{font-family:Orbitron,sans-serif;margin:.3em 0;letter-spacing:1px}h1{font-size:clamp(22px,5vw,34px);color:var(--gd)}h2{color:var(--tl);font-size:20px}
+.card{background:var(--cd);border:2px solid #24478a;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 6px 24px #0006}
+.btn{font:800 18px "Exo 2",sans-serif;background:linear-gradient(90deg,var(--tl),#2f9bff);color:#04122b;border:0;border-radius:14px;padding:13px 22px;cursor:pointer}
+.btn.g{background:linear-gradient(90deg,var(--gd),#ff9f43)}.btn.s{background:#1b3a70;color:var(--tx);font-size:14px;padding:8px 12px}
+input[type=text]{width:100%;font:800 20px Nunito;padding:12px;border-radius:12px;border:2px solid var(--tl);background:#08193a;color:var(--tx)}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.lc{border:2px solid #24478a;border-radius:14px;padding:12px;cursor:pointer;background:#0b1f42;text-align:center}.lc.sel{border-color:var(--gd);background:#25365f;box-shadow:0 0 14px #ffc94d66}.lc b{font:700 18px "Exo 2";display:block}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;font:700 16px "Exo 2"}.tm{font:900 26px Orbitron;color:var(--gd)}.tm.lo{color:var(--no);animation:pl 1s infinite}
+@keyframes pl{50%{opacity:.5}}.bar{height:10px;background:#0b1f42;border-radius:9px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--tl),var(--gd));width:100%}
+.chip{display:inline-block;background:#1b3a70;border-radius:20px;padding:2px 10px;font-size:13px;margin:2px;color:var(--tl)}
+.og{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}
+.opt{background:#0b1f42;color:var(--tx);border:2px solid #2b4f94;border-radius:14px;padding:10px;font:700 16px Nunito;cursor:pointer;text-align:left}.opt:hover:not(:disabled){border-color:var(--tl);transform:translateY(-2px)}
+.opt.ok{border-color:var(--ok);background:#12432f}.opt.bad{border-color:var(--no);background:#4a1f2a}.opt:disabled{cursor:default;color:var(--tx)}
+.gr{width:100%;height:auto;display:block}.gr text{fill:#cfe0ff;font:10px Nunito}
+.tb{border-collapse:collapse;margin:8px 0}.tb td,.tb th{border:1px solid #2b4f94;padding:5px 12px;text-align:center}.tb th{color:var(--gd)}
+.hint{background:#3a2f0f;border-left:5px solid var(--gd);padding:8px 12px;border-radius:8px;margin:8px 0}
+.fb{padding:12px;border-radius:12px;margin-top:12px;animation:pop .4s}.fb.ok{background:#12432f}.fb.no{background:#33264a}@keyframes pop{from{transform:scale(.9);opacity:0}}
+table.d{width:100%;border-collapse:collapse;font-size:clamp(16px,2.2vw,24px)}table.d td,table.d th{padding:8px;border-bottom:1px solid #24478a;text-align:left}
+.m{display:flex;align-items:center;gap:10px;margin:6px 0}.m span{width:44%}.m div{flex:1;height:18px;background:#0b1f42;border-radius:9px;overflow:hidden}.m i{display:block;height:100%;background:linear-gradient(90deg,var(--tl),var(--gd))}
+.st{display:flex;gap:10px;flex-wrap:wrap}.st div{flex:1;min-width:110px;text-align:center;background:#0b1f42;border-radius:14px;padding:10px}.st b{font:900 28px Orbitron;color:var(--gd);display:block}
+canvas{width:100%;height:auto;border-radius:14px}
+</style></head><body><div class="w">
+
+<div id="home" class="scr on">
+<h1>⚡ FALCON LIGHTNING CHALLENGE</h1>
+<div class="card"><h2>🦅 Mission: Dubai Creek Drone Patrol</h2>
+<p>6 minutes · 4 missions · show what <b>you</b> know! Every answer helps your teacher help you. Let's fly! 🚀</p>
+<p><input id="nm" type="text" maxlength="30" placeholder="✍️ Type your name here"></p>
+<div id="lvbox"><p><b>Choose your support level:</b></p><div class="lv" id="lvs"></div></div>
+<p style="text-align:center"><button class="btn g" onclick="go()">🚀 Launch Challenge</button></p></div>
+</div>
+
+<div id="quiz" class="scr"><div class="card"><div class="top"><span id="mn"></span><span>⭐ <span id="xp">0</span> XP</span><span class="tm" id="tm">6:00</span></div><div class="bar"><i id="bar"></i></div></div><div class="card" id="qb"></div></div>
+
+<div id="done" class="scr"><h1>🏁 Mission Complete!</h1><div id="cv"></div>
+<p style="text-align:center"><button class="btn g" onclick="dl()">⬇️ Download my feedback card</button></p>
+<p style="text-align:center">Show your teacher your card. Amazing effort! 🌟</p></div>
+
+
+
+</div><script>
+const $=s=>document.querySelector(s),TL="#19e3c8",GD="#ffc94d",TOT=360;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sh=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+const LV=[["🛰️","Explorer","Hints shown + friendly numbers"],["🧭","Navigator","Hint button when you need it"],["🚀","Commander","No hints · extra challenge"]];
+const LO=["Plot a position–time graph from values","Explain instantaneous position","Convert particle model ⇄ graph","Interpret a graph of one object","Interpret a graph of several objects","Find slopes & intercepts"];
+const TP=["Mark each (t, x) pair, then join the dots.","Instantaneous position = where it is at ONE moment.","Far-apart dots = fast; stacked dots = at rest.","Read the shape: up = away, flat = rest, down = back.","Where lines cross, objects share a position.","Intercept = start; slope = rise ÷ run = velocity."];
+const QT=[[0,2],[2,3],[1,3],[4,5]];
+const D=[
+[{t:[0,2,4],o:[[0,4,8],[8,4,0],[0,8,4]]},{p:[[0,8],[4,0]],o:[[8,6,4,2,0],[0,2,4,6,8],[8,8,8,8,8]]},{p:[[0,2],[2,6],[4,10]],m:3,o:["At t = 3 s it is 8 m from the start point (its instantaneous position)","It travelled 3 m in total","It is moving at 8 m/s"]},{A:[[0,0],[4,8]],B:[[0,4],[4,4]],o:["A starts at 0 m and moves 2 m/s; B starts at 4 m and is at rest; they meet at t = 2 s","B is faster than A because its line is higher","They never meet because B never moves"]}],
+[{t:[0,2,4,6],o:[[0,4,4,8],[0,4,8,8],[8,4,4,0]]},{p:[[0,0],[2,6],[4,6],[6,0]],o:[[0,3,6,6,6,3,0],[0,3,6,6,6,6,6],[0,2,4,6,4,2,0]]},{p:[[0,2],[2,8],[4,8],[6,2]],m:5,o:["At t = 5 s it is 5 m from the origin (its instantaneous position) and moving back","It has travelled 5 m in total","Its speed is 5 m/s at that moment"]},{A:[[0,0],[6,12]],B:[[0,12],[6,0]],o:["They meet at t = 3 s at 6 m; A's slope is +2 m/s, B's slope is −2 m/s (moving toward the origin)","They never meet because B starts at 0 m","Both have slope +2 m/s so they move together"]}],
+[{t:[0,2,4,6],o:[[2,6,6,0],[0,6,6,2],[2,6,2,0],[6,2,2,6]]},{p:[[0,6],[2,2],[4,2],[7,8]],o:[[6,4,2,2,2,4,6,8],[6,4,2,2,2,2,2,2],[6,4,2,0,2,4,6,8],[2,4,6,6,6,4,2,0]]},{p:[[0,8],[3,2],[5,2],[7,6]],m:6,o:["At t = 6 s it is 4 m from the origin and its position is increasing (moving away)","It has travelled 4 m in total","Its speed is 4 m/s at t = 6 s","At t = 6 s it is at rest at 2 m"]},{A:[[0,2],[6,14]],B:[[0,14],[6,8]],o:["A starts at 2 m with slope +2 m/s; B starts at 14 m with slope −1 m/s; they meet at t = 4 s (10 m)","A starts at 0 m and is faster, so they meet at t = 6 s","B starts at 14 m with slope +1 m/s, so they never meet","They meet at t = 2 s because the starting positions differ by 12 m"]}]];
+const H=["Plot each pair (t, x). Does the line go up, stay flat or come down?","Each dot is the drone's position every 1 s. Far apart = fast, same place = at rest.","Find t on the bottom axis, go up to the line, then read x on the side axis.","Intercept = start position. Slope = rise ÷ run = velocity. Lines crossing = same place, same time."];
+const E=["The correct graph passes through every (t, x) point in the table.","Dots far apart = fast, dots stacked = at rest — match every part of the graph.","Instantaneous position is where the object is at one exact moment — read it straight from the graph. It is not distance or speed.","Intercept = start position, slope = velocity, and the crossing point is the same position at the same time."];
+const OK=["Boom! ⚡","Falcon-level thinking! 🦅","Nailed it! 🌟","Yes!! 🚀"],NO=["Good try — you're learning! 💪","So close! Check the tip 🔎","Every pilot learns from this! 🛠️"];
+const nice=m=>Math.max(4,Math.ceil(m/2)*2);
+function at(p,x){for(let i=1;i<p.length;i++)if(x<=p[i][0]){const a=p[i-1],b=p[i];return a[1]+(b[1]-a[1])*(x-a[0])/(b[0]-a[0])}return p[p.length-1][1]}
+function G(L,tm,ym,mk){const w=240,h=150,l=32,b=22,r=10,t=8,sx=x=>l+x/tm*(w-l-r),sy=y=>h-b-y/ym*(h-b-t),st=ym>8?4:2;let s=`<svg viewBox="0 0 ${w} ${h}" class="gr">`;
+for(let y=0;y<=ym;y+=st)s+=`<line x1="${l}" x2="${w-r}" y1="${sy(y)}" y2="${sy(y)}" stroke="#2b4577"/><text x="${l-5}" y="${sy(y)+4}" text-anchor="end">${y}</text>`;
+for(let x=0;x<=tm;x+=2)s+=`<line y1="${t}" y2="${h-b}" x1="${sx(x)}" x2="${sx(x)}" stroke="#2b4577"/><text x="${sx(x)}" y="${h-8}" text-anchor="middle">${x}</text>`;
+s+=`<text x="${w-r}" y="${h-b-4}" text-anchor="end" style="fill:#19e3c8">t (s)</text><text x="${l+4}" y="${t+8}" style="fill:#19e3c8">x (m)</text>`;
+L.forEach(o=>{s+=`<polyline fill="none" stroke="${o.c}" stroke-width="3" points="${o.p.map(q=>sx(q[0])+","+sy(q[1])).join(" ")}"/>`+o.p.map(q=>`<circle cx="${sx(q[0])}" cy="${sy(q[1])}" r="3.5" fill="${o.c}"/>`).join("")});
+if(mk)s+=`<line x1="${sx(mk[0])}" x2="${sx(mk[0])}" y1="${sy(mk[1])}" y2="${h-b}" stroke="${GD}" stroke-dasharray="3"/><circle cx="${sx(mk[0])}" cy="${sy(mk[1])}" r="6" fill="${GD}"/>`;return s+"</svg>"}
+function P(a,mx){const w=240,sx=x=>14+x/mx*(w-28);let s=`<svg viewBox="0 0 ${w} 62" class="gr"><line x1="10" x2="${w-10}" y1="40" y2="40" stroke="#2b4577" stroke-width="2"/>`;
+a.forEach((x,i)=>s+=`<circle cx="${sx(x)}" cy="40" r="6" fill="#19e3c8" opacity="${.35+.65*i/(a.length-1)}"/><text x="${sx(x)}" y="${i%2?16:28}" text-anchor="middle">${i}</text>`);return s+`<text x="${w-10}" y="58" text-anchor="end" style="fill:#ffc94d">numbers = time (s)</text></svg>`}
+
+let me=null,OP=[],tmr=null,CV=null,sel=1,B={},PM={},isD=false,room=null;
+const U=new URLSearchParams(location.search);if(U.get("lvl")){sel=+U.get("lvl")-1;$("#lvbox").style.display="none"}
+$("#lvs").innerHTML=LV.map((v,i)=>`<div class="lc" id="lc${i}" onclick="sel=${i};up()"><span style="font-size:30px">${v[0]}</span><b>${v[1]}</b><small>${v[2]}</small></div>`).join("");
+function up(){LV.forEach((_,i)=>$("#lc"+i).classList.toggle("sel",i==sel))}up();
+const show=id=>{document.querySelectorAll(".scr").forEach(e=>e.classList.toggle("on",e.id==id))};
+function pub(){if(!me)return;const o={n:me.n,l:me.l,a:me.a.map(v=>v==null?-2:v),d:me.d,sc:me.sc,t:me.t||0,ts:Date.now()};try{window.FB&&FB.put(me.id,o)}catch(e){}}
+
+function go(){const n=$("#nm").value.trim();if(!n){$("#nm").focus();$("#nm").placeholder="👆 Please type your name first";return}
+me={id:Math.random().toString(36).slice(2,9),n,l:sel,a:[null,null,null,null],cur:0,start:Date.now(),sc:0,d:0};show("quiz");showQ();pub();tmr=setInterval(tick,250)}
+function tick(){const left=Math.max(0,TOT-(Date.now()-me.start)/1000),m=Math.floor(left/60),s=Math.floor(left%60);$("#tm").textContent=m+":"+String(s).padStart(2,"0");$("#tm").classList.toggle("lo",left<60);$("#bar").style.width=left/TOT*100+"%";if(left<=0)finish()}
+function showQ(){const i=me.cur,d=D[me.l][i];me.lock=0;let q="",v="";
+$("#mn").textContent=`Mission ${i+1} / 4`;$("#xp").textContent=me.sc;
+if(i==0){const all=d.o.flat(),tm=Math.max(...d.t),ym=nice(Math.max(...all));q=`<b>🦅 Falcon-1 flight data</b><table class="tb"><tr><th>t (s)</th>${d.t.map(x=>`<td>${x}</td>`).join("")}</tr><tr><th>x (m)</th>${d.o[0].map(x=>`<td>${x}</td>`).join("")}</tr></table>Which graph plots these points correctly?`;OP=sh(d.o.map((y,k)=>({k,h:G([{p:d.t.map((t,j)=>[t,y[j]]),c:TL}],tm,ym)})))}
+else if(i==1){const tm=d.p[d.p.length-1][0],ym=nice(Math.max(...d.p.map(p=>p[1])));q=`<b>🎯 Falcon-1's flight graph</b><br>Which particle model (a dot every 1 s) matches it?`;v=G([{p:d.p,c:TL}],tm+tm%2,ym);OP=sh(d.o.map((a,k)=>({k,h:P(a,ym)})))}
+else if(i==2){const tm=d.p[d.p.length-1][0],ym=nice(Math.max(...d.p.map(p=>p[1])));q=`<b>📍 Read the gold point at t = ${d.m} s.</b><br>Which statement is true?`;v=G([{p:d.p,c:TL}],tm+tm%2,ym,[d.m,at(d.p,d.m)]);OP=sh(d.o.map((t,k)=>({k,t})))}
+else{const tm=Math.max(d.A[d.A.length-1][0],d.B[d.B.length-1][0]),ym=nice(Math.max(...d.A.concat(d.B).map(p=>p[1])));q=`<b>🦅 Two drones over Dubai Creek!</b> <span style="color:${TL}">● Falcon-A</span> <span style="color:${GD}">● Falcon-B</span><br>Which statement is correct?`;v=G([{p:d.A,c:TL},{p:d.B,c:GD}],tm+tm%2,ym);OP=sh(d.o.map((t,k)=>({k,t})))}
+const gr=i<2?"og":"";
+$("#qb").innerHTML=`${QT[i].map(k=>`<span class="chip">LO${k+1}</span>`).join("")}<p>${q}</p>${v?`<div style="max-width:380px;margin:auto">${v}</div>`:""}
+${me.l==0?`<div class="hint">💡 ${H[i]}</div>`:me.l==1?`<button class="btn s" onclick="this.outerHTML='<div class=hint>💡 ${H[i]}</div>'">💡 Need a hint?</button>`:""}
+<div class="${i<2?"og":""}" ${i>1?'style="display:grid;gap:10px;margin-top:10px"':""}>${OP.map((o,n)=>`<button class="opt" onclick="pick(${n})">${o.h||o.t}</button>`).join("")}</div><div id="fb"></div>`}
+function pick(n){if(me.lock)return;me.lock=1;const ok=OP[n].k==0,i=me.cur,bs=document.querySelectorAll(".opt");bs.forEach((b,j)=>{b.disabled=true;if(OP[j].k==0)b.classList.add("ok");else if(j==n)b.classList.add("bad")});
+me.a[i]=ok?1:0;if(ok)me.sc+=25;$("#xp").textContent=me.sc;
+$("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?OK[i%4]+" +25 XP":NO[i%3]}</b><br>${E[i]}</div><p style="text-align:right"><button class="btn" onclick="nx()">${i<3?"Next mission ➜":"Finish 🏁"}</button></p>`;pub()}
+function nx(){me.cur++;me.cur>3?finish():showQ()}
+function finish(){if(me.d)return;clearInterval(tmr);me.a=me.a.map(v=>v==null?-1:v);me.d=1;me.t=Math.min(TOT,Math.round((Date.now()-me.start)/1000));pub();show("done");CV=card();$("#cv").innerHTML="";$("#cv").appendChild(CV)}
+function los(){const g=[],w=[];for(let k=0;k<6;k++){const r=QT.map((q,i)=>q.includes(k)?me.a[i]:null).filter(v=>v!==null);(r.every(v=>v===1)?g:w).push(k)}return[g,w]}
+function card(){const c=document.createElement("canvas");c.width=800;c.height=1000;const x=c.getContext("2d"),f="Nunito, sans-serif";
+const gr=x.createLinearGradient(0,0,0,1000);gr.addColorStop(0,"#14407c");gr.addColorStop(1,"#07142b");x.fillStyle=gr;x.fillRect(0,0,800,1000);x.strokeStyle=GD;x.lineWidth=6;x.strokeRect(14,14,772,972);
+const T=(s,X,Y,z,col,al)=>{x.font=`800 ${z}px ${f}`;x.fillStyle=col;x.textAlign=al||"left";x.fillText(s,X,Y)};
+const [g,w]=los(),n=me.a.filter(v=>v==1).length,m=Math.floor(me.t/60),s=String(me.t%60).padStart(2,"0");
+T("⚡ MY LIGHTNING CHALLENGE CARD",400,80,34,GD,"center");T(me.n,400,150,48,"#fff","center");
+T(`${LV[me.l][0]} ${LV[me.l][1]} level · ${m}:${s} used`,400,195,24,TL,"center");
+T("⭐".repeat(Math.max(1,n>=4?3:n>=3?2:1))+"☆".repeat(3-Math.max(1,n>=4?3:n>=3?2:1)),400,262,56,GD,"center");
+T(`Score: ${me.sc} / 100 XP · ${n} of 4 missions correct`,400,310,26,"#fff","center");
+T(["Launch Cadet — ready for takeoff! 🚀","Rising Cadet! 🌱","Sky Pilot! 🛩️","Sky Pilot! 🛩️","Falcon Commander! 🦅"][n],400,350,28,TL,"center");
+let y=410;T("💪 MY STRENGTHS",40,y,28,"#3ddc84");y+=38;
+if(!g.length){T("I took off and gave it a go — that's brave! 🌟",50,y,22,"#fff");y+=36}
+g.forEach(k=>{T("✔ "+LO[k],50,y,22,"#fff");y+=34});y+=22;
+T("🎯 MY NEXT STEPS",40,y,28,GD);y+=38;
+if(!w.length){T("Wow — nothing to fix. Try the Commander level! 🚀",50,y,22,"#fff")}
+w.forEach(k=>{T("➜ "+LO[k],50,y,22,"#fff");y+=27;T(TP[k],72,y,19,"#9fc2ff");y+=38});
+T("Every expert was once a cadet. Keep flying! 🦅",400,960,24,GD,"center");return c}
+async function dl(){const f=me.n.replace(/\W+/g,"_")+"_exit_ticket_card.png";CV.toBlob(async b=>{try{const d=await window.claude.use("downloads");if(d){await d.save({filename:f,data:b});return}}catch(e){}const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f;a.click()})}
+
+</script><script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,set} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {cfg} from "./config.js";
+try{const db=getDatabase(initializeApp(cfg));window.FB={put:(id,o)=>set(ref(db,"ticket/"+cfg.session+"/"+id),o)}}catch(e){console.warn(e)}
+</script>
+</body></html>

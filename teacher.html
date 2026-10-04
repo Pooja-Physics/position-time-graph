@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Teacher Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@500;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07142b;--tl:#19e3c8;--gd:#ffc94d;--tx:#eaf2ff;--ok:#3ddc84;--no:#ff8a8a;--cd:#0f2750;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#14407c,var(--bg) 60%) fixed;color:var(--tx);font:600 17px Nunito,sans-serif}
+.w{max-width:780px;margin:0 auto;padding:14px}.scr{display:none}.on{display:block}
+h1,h2{font-family:Orbitron,sans-serif;margin:.3em 0;letter-spacing:1px}h1{font-size:clamp(22px,5vw,34px);color:var(--gd)}h2{color:var(--tl);font-size:20px}
+.card{background:var(--cd);border:2px solid #24478a;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 6px 24px #0006}
+.btn{font:800 18px "Exo 2",sans-serif;background:linear-gradient(90deg,var(--tl),#2f9bff);color:#04122b;border:0;border-radius:14px;padding:13px 22px;cursor:pointer}
+.btn.g{background:linear-gradient(90deg,var(--gd),#ff9f43)}.btn.s{background:#1b3a70;color:var(--tx);font-size:14px;padding:8px 12px}
+input[type=text],input[type=password]{margin:6px 0;width:100%;font:800 20px Nunito;padding:12px;border-radius:12px;border:2px solid var(--tl);background:#08193a;color:var(--tx)}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.lc{border:2px solid #24478a;border-radius:14px;padding:12px;cursor:pointer;background:#0b1f42;text-align:center}.lc.sel{border-color:var(--gd);background:#25365f;box-shadow:0 0 14px #ffc94d66}.lc b{font:700 18px "Exo 2";display:block}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;font:700 16px "Exo 2"}.tm{font:900 26px Orbitron;color:var(--gd)}.tm.lo{color:var(--no);animation:pl 1s infinite}
+@keyframes pl{50%{opacity:.5}}.bar{height:10px;background:#0b1f42;border-radius:9px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--tl),var(--gd));width:100%}
+.chip{display:inline-block;background:#1b3a70;border-radius:20px;padding:2px 10px;font-size:13px;margin:2px;color:var(--tl)}
+.og{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}
+.opt{background:#0b1f42;color:var(--tx);border:2px solid #2b4f94;border-radius:14px;padding:10px;font:700 16px Nunito;cursor:pointer;text-align:left}.opt:hover:not(:disabled){border-color:var(--tl);transform:translateY(-2px)}
+.opt.ok{border-color:var(--ok);background:#12432f}.opt.bad{border-color:var(--no);background:#4a1f2a}.opt:disabled{cursor:default;color:var(--tx)}
+.gr{width:100%;height:auto;display:block}.gr text{fill:#cfe0ff;font:10px Nunito}
+.tb{border-collapse:collapse;margin:8px 0}.tb td,.tb th{border:1px solid #2b4f94;padding:5px 12px;text-align:center}.tb th{color:var(--gd)}
+.hint{background:#3a2f0f;border-left:5px solid var(--gd);padding:8px 12px;border-radius:8px;margin:8px 0}
+.fb{padding:12px;border-radius:12px;margin-top:12px;animation:pop .4s}.fb.ok{background:#12432f}.fb.no{background:#33264a}@keyframes pop{from{transform:scale(.9);opacity:0}}
+table.d{width:100%;border-collapse:collapse;font-size:clamp(16px,2.2vw,24px)}table.d td,table.d th{padding:8px;border-bottom:1px solid #24478a;text-align:left}
+.m{display:flex;align-items:center;gap:10px;margin:6px 0}.m span{width:44%}.m div{flex:1;height:18px;background:#0b1f42;border-radius:9px;overflow:hidden}.m i{display:block;height:100%;background:linear-gradient(90deg,var(--tl),var(--gd))}
+.st{display:flex;gap:10px;flex-wrap:wrap}.st div{flex:1;min-width:110px;text-align:center;background:#0b1f42;border-radius:14px;padding:10px}.st b{font:900 28px Orbitron;color:var(--gd);display:block}
+canvas{width:100%;height:auto;border-radius:14px}
+</style></head><body><div class="w">
+<div id="login" class="card"><h1>🎓 Teacher Login</h1><input id="em" type="text" placeholder="Teacher email" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password"><p id="err" style="color:var(--no)"></p><button class="btn g" id="go">Sign in</button></div>
+<div id="dash" style="display:none"><h1>🎓 Class Live Dashboard</h1><p>Session: <b id="ses"></b></p><p><button class="btn s" id="fs">⛶ Fullscreen</button> <button class="btn s" id="clr">🧹 Clear this session</button> <button class="btn s" id="out">Sign out</button></p><div id="db"></div></div>
+</div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getDatabase,ref,onValue,remove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {cfg} from "./config.js";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LV=[["🛰️","Explorer","Hints shown + friendly numbers"],["🧭","Navigator","Hint button when you need it"],["🚀","Commander","No hints · extra challenge"]];
+const LO=["Plot a position–time graph from values","Explain instantaneous position","Convert particle model ⇄ graph","Interpret a graph of one object","Interpret a graph of several objects","Find slopes & intercepts"];
+const QT=[[0,2],[2,3],[1,3],[4,5]];
+let S={},un=null;
+function dash(){const all=Object.values(S).map(s=>({...s,a:Array.isArray(s.a)?s.a:Object.values(s.a||{})})).sort((a,b)=>String(a.n).localeCompare(String(b.n))),fin=all.filter(s=>s.d);
+const mk=k=>{let t=0,o=0;all.forEach(s=>QT.forEach((q,i)=>{if(q.includes(k)&&s.a[i]!=null&&s.a[i]>=0){t++;o+=s.a[i]}}));return t?Math.round(o/t*100):null};
+const avg=fin.length?Math.round(fin.reduce((a,s)=>a+s.sc,0)/fin.length):0,help=fin.filter(s=>s.a.filter(v=>v!=1).length>=2);
+const dot=v=>v==1?"🟢":v==0?"🔴":v==-1?"⚪":"▫️";
+$("#db").innerHTML=`<div class="card st"><div><b>${all.length}</b>joined</div><div><b>${fin.length}</b>finished</div><div><b>${avg}</b>avg XP</div>${LV.map((v,i)=>`<div><b>${all.filter(s=>s.l==i).length}</b>${v[0]} ${v[1]}</div>`).join("")}</div>
+<div class="card"><h2>📊 Learning objective mastery (live)</h2>${LO.map((n,k)=>{const p=mk(k);return`<div class="m"><span>LO${k+1} ${n}</span><div><i style="width:${p||0}%"></i></div><b>${p==null?"–":p+"%"}</b></div>`}).join("")}</div>
+${help.length?`<div class="card">👀 <b>Check in with:</b> ${help.map(s=>esc(String(s.n).slice(0,30))).join(", ")}</div>`:""}
+<div class="card"><table class="d"><tr><th>Student</th><th>Level</th><th>Q1 Q2 Q3 Q4</th><th>XP</th><th></th></tr>${all.map(s=>`<tr><td>${esc(String(s.n).slice(0,30))}</td><td>${(LV[s.l]||LV[0])[0]}</td><td>${s.a.map(dot).join(" ")}</td><td>${+s.sc||0}</td><td>${s.d?"✅ done":"⏳ flying"}</td></tr>`).join("")||'<tr><td colspan=5>Waiting for students to launch… 🚀</td></tr>'}</table></div>`}
+
+const app=initializeApp(cfg),au=getAuth(app),db=getDatabase(app),R=ref(db,"ticket/"+cfg.session);
+$("#ses").textContent=cfg.session;
+$("#go").onclick=async()=>{$("#err").textContent="";try{await signInWithEmailAndPassword(au,$("#em").value.trim(),$("#pw").value)}catch(e){$("#err").textContent="Login failed - check email and password."}};
+$("#pw").onkeydown=e=>{if(e.key=="Enter")$("#go").click()};
+$("#out").onclick=()=>signOut(au);
+$("#clr").onclick=()=>{if(confirm("Delete ALL results for session "+cfg.session+"?"))remove(R)};
+$("#fs").onclick=()=>document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();
+onAuthStateChanged(au,u=>{$("#login").style.display=u?"none":"block";$("#dash").style.display=u?"block":"none";if(un){un();un=null}if(u){un=onValue(R,sn=>{S=sn.val()||{};dash()},e=>{$("#db").textContent="Cannot read data: "+e.message});dash()}});
+</script></body></html>
